@@ -69,6 +69,28 @@
               </div>
             </template>
           </v-menu>
+
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props">
+                <span class="ml-2" style="text-transform: none">{{ loginUser.profileName }}</span>
+              </v-btn>
+            </template>
+
+            <v-list nav density="compact">
+              <v-list-item
+                v-for="(item, i) in profileList"
+                :key="i"
+                :value="item"
+                @click="changeRouter(item.value, item.clickPath)"
+              >
+                <template v-slot:prepend>
+                  <v-icon :icon="item.icon"></v-icon>
+                </template>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-row>
       </v-app-bar>
       <v-navigation-drawer v-model="drawer" fixed temporary>
@@ -220,6 +242,22 @@ export default {
       clickPath: "About",
       settingHide: true,
       settings: [
+        // {
+        //   title: "Logout",
+        //   icon: "mdi-logout",
+        //   value: "/logout",
+        //   clickPath: "LogOut",
+        // },
+      ],
+      settingsmenu: [],
+      currentYear: "",
+      profileList: [
+        {
+          title: "Change Password",
+          icon: "mdi-lock",
+          value: "/change_password",
+          clickPath: "Change Password",
+        },
         {
           title: "Logout",
           icon: "mdi-logout",
@@ -227,27 +265,20 @@ export default {
           clickPath: "LogOut",
         },
       ],
-      settingsmenu: [
+      profileListMenu: [
         {
-          title: "Brand",
-          value: "/brand",
-          clickPath: "Brand",
-          icon: "mdi-store",
+          title: "Profile",
+          icon: "mdi-emoticon-outline",
+          value: "/userform",
+          clickPath: "Profile",
         },
         {
-          title: "Product",
-          value: "/product",
-          clickPath: "Prouduct",
-          icon: "mdi-plus-circle",
-        },
-        {
-          title: "News",
-          value: "/adminnews",
-          clickPath: "News",
-          icon: "mdi-note-plus-outline",
+          title: "Change Password",
+          icon: "mdi-lock",
+          value: "/change_password",
+          clickPath: "Change Password",
         },
       ],
-      currentYear: "",
     };
   },
   props: {},
@@ -387,7 +418,6 @@ export default {
     loginMounted() {
       if (this.isLogin) {
         this.loginUser = this.$store.state.userAccount;
-        console.log(this.loginUser);
 
         this.hiddenToolbar = false;
         // this.settingHide = true;
